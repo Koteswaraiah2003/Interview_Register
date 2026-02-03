@@ -12,6 +12,39 @@ int ifInterviewRegistred;
 
 Interviewmanager::Interviewmanager() {}
 
+bool numberValid(string number)
+{
+    int length=0;
+    for(char ch:number)
+    {
+        if(ch>='0' && ch<='9'){}
+        else
+            return false;
+        length++;
+    }
+//    cout<<"Length="<<length<<endl;
+    if(length>2)
+        return false;
+    return true;
+}
+bool whitespace(string name)
+{
+    if(name[0] == ' ')
+        return false;
+
+    else
+    {
+        int i=1;
+        while(name[i]!='\0')
+        {
+            if(name[i]==' ' && name[i+1]==' ')
+                return false;
+            i++;
+        }
+    }
+    return true;
+}
+
 bool Interviewmanager::isValidName(string name)
 {
     int length=0;
@@ -83,27 +116,31 @@ bool Interviewmanager::isValidPhno(string name)
 }
 void Interviewmanager::Login()
 {
+    string option1;
     int option=0;
     while(option!=3)
     {
-        cout<<"1)Admin\t2)Canditate3)exit\n";
-        cin>>option;
+        cout<<"1)Admin\t2)Canditate\t3)exit\n";
+        getline(cin,option1);
+        if(!(numberValid(option1)))
+        {
+            cout<<"Invalid input"<<endl;
+        }
+        else
+        {
+            option=option1[0]-'0';
+            if(option == 0)
+                cout<<" 0 will not accept"<<endl;
+            else if(option==1)
+            {
+                adminLogin();
+            }
+            else if(option==2)
+            {
+                addCanditate();
+            }
+        }
 
-        if (cin.fail())// manual check without cin.fail
-        {
-            cin.clear(); //manual clear
-            cin.ignore(100, '\n'); // manual
-            cout << "Invalid input enter a number\n";
-
-        }
-        else if(option==1)
-        {
-            adminLogin();
-        }
-        else if(option==2)
-        {
-            addCanditate();
-        }
     }
 }
 void Interviewmanager::adminLogin()
@@ -111,7 +148,9 @@ void Interviewmanager::adminLogin()
     int option=0;
     string name;
     string password;
-    cin.ignore(1000, '\n');
+
+//    cin.clear();
+    // cin.ignore(1000, '\n');
 
     if(ifInterviewRegistred==0)
     {
@@ -156,7 +195,6 @@ void Interviewmanager::adminLogin()
                 continue;
             }
             break;
-
         }
         while(true)
         {
@@ -169,73 +207,84 @@ void Interviewmanager::adminLogin()
             }
             cout<<"Password is incorrect please Enter correct password"<<endl;
         }
-
+        string option1;
         while(option!=4)
         {
                 cout<<"1)Display_canditate_details\t2)Display_Interviwer_details\t3)interviwer\t4)exit\n";
-                cin>>option;
-                if (cin.fail())
+                getline(cin,option1);
+                if(!(numberValid(option1)))
                 {
-                    cin.clear();
-                    cin.ignore(100, '\n');
-                    cout << "Invalid input enter a number\n";
-                    continue;
+                    cout<<"Invalid input"<<endl;
                 }
-                if(option==1)
+                else
                 {
-                    displayCanditate();
-                }
-                if(option==2)
-                {
-                    displayInterviwer();
-                }
-                if(option==3)
-                {
-                    while(true)
+                    option=option1[0]-'0';
+                    if(option == 0)
                     {
-                        int option1;
-                        cout<<"1)addinterviewer\t2)removeinterviewer\t3)exit\n";
-                        cin>>option1;
-                        if (cin.fail())
+                        cout<<" 0 will not accept"<<endl;
+                    }
+                        else if(option==1)
                         {
-                            cin.clear();
-                            cin.ignore(100, '\n');
-                            cout << "Invalid input enter a number\n";
-                            continue;
+                            displayCanditate();
+                        }
+                        else if(option==2)
+                        {
+                            displayInterviwer();
+                        }
+                        else if(option==3)
+                        {
+                            while(true)
+                            {
+                                string option4;
+                                int option5;
+                                cout<<"1)addinterviewer\t2)removeinterviewer\t3)exit\n";
+                                getline(cin,option4);
+
+                                if(!(numberValid(option4)))
+                                {
+                                cout<<"Invalid input"<<endl;
+                                }
+                                else
+                                {
+                                    option5=option4[0]-'0';
+                                    if(option5 == 0)
+                                    {
+                                    cout<<" 0 will not accept"<<endl;
+                                    }
+
+                                    else if(option5==1){
+                                    addInterviwer();
+                                    }
+
+                                    else if(option5==2)
+                                    {
+                                        removeInterviwer();
+                                    }
+                                    else if(option5==3)
+                                        break;
+
+                                }
+                            }
                         }
 
-                        if(option1==1){
-                            addInterviwer();
-                        }
-                        if(option1==2)
-                        {
-                            removeInterviwer();
-                        }
-                        if(option1==3)
-                            break;
-                        if((option1!=1)&&(option1!=2)&&(option1!=3))
-                        {
-                            cout<<"please select correct option\n";
-                            break;
-                        }
-                    }
+
                 }
                 if((option!=1)&&(option!=2)&&(option!=3)&&(option!=4))
                 {
                     cout<<"please select correct option\n";
                 }
-            }
+
         }
     }
 
-
+}
 
 
 void Interviewmanager::addCanditate()
 {
-    string name,lang,phno;
+    string name,requirement,phno;
     Canditate c;
-    cin.ignore(1000, '\n');
+//    cin.ignore(1000, '\n');
 
     while(true)
     {
@@ -245,7 +294,7 @@ void Interviewmanager::addCanditate()
             break;
         cout<<"please Enter correct name"<<endl;
     }
-    c.setName(name);
+    c.setCanditateName(name);
 
     while(true)
     {
@@ -256,11 +305,18 @@ void Interviewmanager::addCanditate()
         cout<<"Please enter valid phonenumber"<<endl;
     }
 
-    c.setPhno(phno);
+    c.setCanditatePhno(phno);
 
-    cout<<"Enter which Language you know"<<endl;
-    getline(cin,lang);
-    c.setLang(lang);
+    while(true)
+    {
+        cout<<"Enter which Language you know"<<endl;
+        getline(cin,requirement);
+        if((whitespace(requirement))){
+            break;
+        }
+        cout<<"enter valid requirement"<<endl;
+    }
+    c.setCanditateRequirement(requirement);
 
     mylist* newNode=new mylist();
     newNode->canditatedata = c;
@@ -282,9 +338,7 @@ void Interviewmanager::addInterviwer()
 {
     Interviwer interviewer;
     string name;
-    string lang;
-    cin.ignore(1000, '\n');
-
+    string id;
     while(true)
     {
         cout<<"Enter your name"<<endl;
@@ -293,20 +347,12 @@ void Interviewmanager::addInterviwer()
             break;
         cout<<"Please Enter correct name"<<endl;
     }
-
-    // L1:
-    // cout<<"Enter your name"<<endl;
-    // getline(cin,name);
-    // if(!(isValidName(name))){
-    //     cout<<"please enter correct name\n";
-    //     goto L1;
-    // }
-    interviewer.setName(name);
+    interviewer.setInterviwerName(name);
 
     cout<<"Enter your Id"<<endl;
-    getline(cin,lang);
+    getline(cin,id);
 
-    interviewer.setEmpId(lang);
+    interviewer.setInterviwerId(id);
 
     mylist* newNode=new mylist();
     newNode->interviwerdata = interviewer;
@@ -338,7 +384,7 @@ void Interviewmanager::displayCanditate()
     while(temp!=nullptr)
     {
         cout<<i<<") ";
-        temp->canditatedata.display();
+        temp->canditatedata.displayCanditateDetails();
         temp=temp->next;
         i++;
     }
@@ -356,7 +402,7 @@ void Interviewmanager::displayInterviwer()
     while(temp!=nullptr)
     {
         cout<<i<<") ";
-        temp->interviwerdata.display();
+        temp->interviwerdata.displayInterviwerDetails();
         temp=temp->next;
         i++;
     }
@@ -375,71 +421,76 @@ void Interviewmanager::removeInterviwer()
     while(temp!=nullptr)
     {
         cout<<count+1<<") ";
-        temp->interviwerdata.display();
+        temp->interviwerdata.displayInterviwerDetails();
         temp=temp->next;
         count++;
     }
     cout<<endl;
     int option;
-//    L1:
+
     while(true)
     {
+        string option1;
         cout<<"Enter which one you want to remove"<<endl;
-        cin>>option;
+        getline(cin,option1);
 
-        if (cin.fail())
+        if(!(numberValid(option1)))
         {
-            cin.clear();
-            cin.ignore(100, '\n');
-            cout << "Invalid input enter a number\n";
-            continue;
+            cout<<"Invalid input"<<endl;
         }
-
-        if((option < 1)|| option >count)
+        else
         {
-            cout<<"that node is not available"<<endl;
-            // goto L1;
-            continue;
+            option=option1[0] - '0';
+            if((option < 1)|| option >count)
+            {
+                cout<<"that node is not available"<<endl;
+                // goto L1;
+            }
+            else
+            {
+                int i=1;
+                temp = interviwerlist.head;
+
+                while(temp!=nullptr && i<option){
+                    temp = temp->next;
+                    i++;
+                }
+
+                if(interviwerlist.head == interviwerlist.end)
+                {
+                    cout<<temp->interviwerdata.getInterviwerId();
+                    delete interviwerlist.head;
+                    interviwerlist.head = interviwerlist.end = nullptr;
+                    cout<<" is deleted"<<endl;
+                    return;
+                }
+                if(temp == interviwerlist.head)
+                {
+                    cout<<temp->interviwerdata.getInterviwerId();
+                    interviwerlist.head = temp->next;
+                    interviwerlist.head->prev =nullptr;
+                    delete temp;
+                    cout<<" is deleted\n";
+                    return;
+                }
+
+                if(temp == interviwerlist.end)
+                {
+                    cout<<temp->interviwerdata.getInterviwerId();
+                    interviwerlist.end = temp->prev;
+                    interviwerlist.end->next = nullptr;
+                    delete temp;
+                    cout<<" is deleted\n";
+                    return;
+                }
+                cout<<temp->interviwerdata.getInterviwerId();
+                temp->prev->next = temp->next;
+                temp->next->prev = temp->prev;
+                delete temp;
+                cout<<" is deleted\n";
+                break;
+            }
         }
-
-    int i=1;
-    temp = interviwerlist.head;
-
-    while(temp!=nullptr && i<option){
-        temp = temp->next;
-        i++;
-    }
-
-    if(interviwerlist.head == interviwerlist.end)
-    {
-        delete interviwerlist.head;
-        interviwerlist.head = interviwerlist.end = nullptr;
-        cout<<"Node is deleted"<<endl;
-        return;
-    }
-    if(temp == interviwerlist.head)
-    {
-        interviwerlist.head = temp->next;
-        interviwerlist.head->prev =nullptr;
-        delete temp;
-        cout<<"first node is deleted\n";
-        return;
-    }
-
-    if(temp == interviwerlist.end)
-    {
-        interviwerlist.end = temp->prev;
-        interviwerlist.end->next = nullptr;
-        delete temp;
-        cout<<"last node is deleted\n";
-        return;
-    }
-
-    temp->prev->next = temp->next;
-    temp->next->prev = temp->prev;
-    delete temp;
-    cout<<"Node is deleted\n";
-    break;
     }
 
 }

@@ -1,23 +1,23 @@
 #include "interviwer.h"
 #include"canditate.h"
 
-void Interviwer::setEmpId(string empid)
+void Interviwer::setInterviwerId(string empid)
 {
     m_employeid = empid;
 }
-void Interviwer::setName(string name)
+void Interviwer::setInterviwerName(string name)
 {
     m_name = name;
 }
-string Interviwer::getEmpId()
+string Interviwer::getInterviwerId()
 {
     return m_employeid;
 }
-string Interviwer::getName()
+string Interviwer::getinterviwerName()
 {
     return m_name;
 }
-void Interviwer::display()
+void Interviwer::displayInterviwerDetails()
 {
     cout<<"InterviewerName: "<<m_name<<"\t\t"<<"EmpId: "<<m_employeid<<endl;
 }

@@ -12,11 +12,11 @@ class Interviwer
     string m_employeid;
 public:
     // Interviwer(int i,string n);
-    void setName(string name);
-    void setEmpId(string empid);
-    string getName();
-    string getEmpId();
-    void display();
+    void setInterviwerName(string name);
+    void setInterviwerId(string empid);
+    string getinterviwerName();
+    string getInterviwerId();
+    void displayInterviwerDetails();
 };
 
 #endif // INTERVIWER_H

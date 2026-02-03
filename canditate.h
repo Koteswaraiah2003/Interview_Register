@@ -14,13 +14,13 @@ class Canditate
 public:
 
     Canditate();
-    void setName(string n);
-    void setPhno(string phn);
-    void setLang(string lang);
-    string getName();
-    string getPhno();
-    string getLang();
-    void display();
+    void setCanditateName(string n);
+    void setCanditatePhno(string phn);
+    void setCanditateRequirement(string lang);
+    string getCanditateName();
+    string getCandiatePhno();
+    string getCanditateRequirement();
+    void displayCanditateDetails();
 };
 
 
