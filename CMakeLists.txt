@@ -9,7 +9,7 @@ add_executable(Interviwer_Register main.cpp
     canditate.h canditate.cpp
     interviwer.h interviwer.cpp
     interviewmanager.h interviewmanager.cpp
-    date_time.h date_time.cpp
+    datetime.h datetime.cpp
     mylist.h mylist.cpp
     functions.cpp
     canditatelist.h canditatelist.cpp

@@ -19,5 +19,5 @@ string Interviwer::getinterviwerName()
 }
 void Interviwer::displayInterviwerDetails()
 {
-    cout<<"InterviewerName: "<<m_name<<"\t\t"<<"EmpId: "<<m_employeid<<endl;
+    cout<<"InterviewerName: "<<m_name<<"\t\t"<<"EmployeeId: "<<m_employeid<<endl;
 }

@@ -1,11 +1,16 @@
 #include "canditate.h"
 using namespace std;
 Canditate::Canditate() {
+}
 
+void Canditate::setCanditateId(int i)
+{
+    m_canditateid = i;
+    cout<<m_canditateid<<endl;
 }
 void Canditate::displayCanditateDetails()
 {
-    cout<<"Name: "<<m_canditatename<<"\t\t"<<"phno: "<<m_canditatephno<<"\t\t"<<"Requirement: "<<m_requirement<<endl;
+    cout<<"CanditateID: "<<m_canditateid<<"\t\t"<<"Name: "<<m_canditatename<<"\t\t"<<"PhoneNumber: "<<m_canditatephno<<"\t\t"<<"Requirement: "<<m_requirement<<endl;
 }
 void Canditate::setCanditateName(string n){
 
@@ -30,5 +35,9 @@ string Canditate::getCanditateRequirement()
 string Canditate::getCandiatePhno()
 {
     return m_canditatephno;
+}
+int Canditate::getCabditateId()
+{
+    return m_canditateid;
 }
 

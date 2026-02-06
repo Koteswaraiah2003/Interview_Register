@@ -1,6 +1,6 @@
 #include "interviewmanager.h"
 #include"canditate.h"
-#include"date_time.h"
+#include"datetime.h"
 #include"interviwer.h"
 #include<list>
 #include<cstring>
@@ -9,8 +9,109 @@
 
 //int flag;
 int ifInterviewRegistred;
+int canditateId=1;
 
 Interviewmanager::Interviewmanager() {}
+
+
+bool Interviewmanager::checkTimeValid(const string time)
+{
+    if (time.length() != 5)
+        return false;
+
+    if (time[2] != ':')
+        return false;
+
+    if (!isdigit(time[0]) || !isdigit(time[1]) || !isdigit(time[3]) || !isdigit(time[4]))
+        return false;
+
+    size_t p1 = time.find(':');
+
+    string hour   = time.substr(0, p1);
+    string minute = time.substr(p1 + 1);
+
+    int Hour = stoi(hour);
+    int Minute = stoi(minute);
+
+    if ((Hour < 9) || (Hour > 18))
+        return false;
+
+    if (Hour == 9 && Minute < 30)
+        return false;
+
+    if (Hour == 18 && Minute > 0)
+        return false;
+
+    if ((Minute < 0) || (Minute > 59))
+        return false;
+
+    return true;
+}
+
+bool Interviewmanager::checkDateValid(const string date)
+{
+    if (date.length() != 10)
+        return false;
+
+    if (date[2] != ':' || date[5] != ':')
+        return false;
+
+    for (int i = 0; i < 10; i++)
+    {
+        if (i == 2 || i == 5)
+            continue;
+        if (!isdigit(date[i]))
+            return false;
+    }
+    int day   = stoi(date.substr(0, 2));
+    int month = stoi(date.substr(3, 2));
+    int year  = stoi(date.substr(6, 4));
+
+    if ((month < 1) || (month > 12))
+        return false;
+
+    if (day < 1)
+        return false;
+
+    int daysInMonth[] ={ 31, 28, 31, 30, 31, 30,31, 31, 30, 31, 30, 31};
+
+    bool leap =(year % 4 == 0 && year % 100 != 0) ||(year % 400 == 0);
+
+    if (leap)
+        daysInMonth[1] = 29;
+
+    if (day > daysInMonth[month - 1])
+        return false;
+
+    tm userDate = {};
+    userDate.tm_mday = day;
+    userDate.tm_mon  = month - 1;
+    userDate.tm_year = year - 1900;
+    userDate.tm_hour = 0;
+    userDate.tm_min  = 0;
+    userDate.tm_sec  = 0;
+
+    time_t userTime = mktime(&userDate);
+
+    time_t now = time(nullptr);
+    tm today = *localtime(&now);
+
+    today.tm_hour = 0;
+    today.tm_min  = 0;
+    today.tm_sec  = 0;
+
+    time_t todayTime = mktime(&today);
+
+    if (difftime(userTime, todayTime) < 0)
+        return false;
+
+    if (userDate.tm_wday == 0 || userDate.tm_wday == 6)
+        return false;
+
+    return true;
+}
+
+
 
 bool numberValid(string number)
 {
@@ -237,7 +338,7 @@ void Interviewmanager::adminLogin()
                             {
                                 string option4;
                                 int option5;
-                                cout<<"1)addinterviewer\t2)removeinterviewer\t3)exit\n";
+                                cout<<"1)addinterviewer\t2)removeinterviewer\t3)scheduleInterview\t4)RemoveScheduleInterview\t5)exit\n";
                                 getline(cin,option4);
 
                                 if(!(numberValid(option4)))
@@ -260,14 +361,20 @@ void Interviewmanager::adminLogin()
                                     {
                                         removeInterviwer();
                                     }
-                                    else if(option5==3)
+                                    else if(option5 == 3)
+                                    {
+                                        ScheduleInterview();
+                                    }
+                                    else if(option5==4)
+                                    {
+                                        removeScheduleInterview();
+                                    }
+                                    else if(option5==5)
                                         break;
 
                                 }
                             }
                         }
-
-
                 }
                 if((option!=1)&&(option!=2)&&(option!=3)&&(option!=4))
                 {
@@ -276,9 +383,55 @@ void Interviewmanager::adminLogin()
 
         }
     }
+}
+
+void Interviewmanager::removeScheduleInterview()
+{
 
 }
 
+void Interviewmanager::ScheduleInterview()
+{
+    cout<<"Scheduling interview"<<endl;
+    Canditate canditate;
+    Interviwer interviwer;
+    if(!(displayCanditate()))
+    {
+        cout<<"we can't schedule interviwer \ncanditates is not available\n"<<endl;
+        return;
+    }
+    if(!(displayInterviwer()))
+    {
+        cout<<"we can't schedule interviwer \ninterviwer is not available\n"<<endl;
+    }
+
+    string date,time;
+
+    // cout<<"Date:"<<datetime.getDate()<<endl;
+    // cout<<"Time:"<<datetime.getTime()<<endl;
+    while(true)
+    {
+        cout<<"Enter which day you want to take please enter date that date formate should be 06:02:2026"<<endl;
+        cin>>date;
+        if(checkDateValid(date))
+        {
+            break;
+        }
+        cout<<"\nsorry the formate is wrong\n"<<endl;
+    }
+    while(true)
+    {
+        cout<<"\nEnter at what time you want to take time should be 24 hours formate 10:48"<<endl;
+        cin>>time;
+        if(checkTimeValid(time))
+        {
+            break;
+        }
+        cout<<"sorry the formate is wrong"<<endl;
+    }
+    cout<<"Thankyou Interview is scheduled"<<endl;
+
+}
 
 void Interviewmanager::addCanditate()
 {
@@ -318,18 +471,26 @@ void Interviewmanager::addCanditate()
     }
     c.setCanditateRequirement(requirement);
 
+    c.setCanditateId(canditateId);
+
+
     mylist* newNode=new mylist();
     newNode->canditatedata = c;
 
     if(canditatelist.head == nullptr)
     {
+        cout<<"This is your ID: "<<canditateId<<endl;
+        canditateId++;
         canditatelist.head=newNode;
         canditatelist.end=newNode;
         return;
     }
+    cout<<"This is your ID: "<<canditateId<<endl;
+
     canditatelist.end->next = newNode;
     newNode->prev =canditatelist.end;
     canditatelist.end = newNode;
+    canditateId++;
 
 //    canditate.push_back(c);
 
@@ -372,12 +533,14 @@ void Interviewmanager::addInterviwer()
 //    myInterviwer.push_back(interviewer);
 }
 
-void Interviewmanager::displayCanditate()
+bool Interviewmanager::displayCanditate()
 {
     if(canditatelist.head == nullptr)
     {
         cout<<"Canditate List is empty"<<endl;
+        return false;
     }
+    cout<<"\nDisplaying Canditate Details"<<endl;
     int i=1;
     mylist* temp = canditatelist.head;
 
@@ -388,14 +551,18 @@ void Interviewmanager::displayCanditate()
         temp=temp->next;
         i++;
     }
+    return true;
 }
 
-void Interviewmanager::displayInterviwer()
+bool Interviewmanager::displayInterviwer()
 {
     if(interviwerlist.head == nullptr)
     {
         cout<<"Interviwer List is empty"<<endl;
+        return false;
     }
+
+    cout<<"\nDisplaying Interviwer details"<<endl;
 
     mylist* temp = interviwerlist.head;
     int i=1;
@@ -406,6 +573,7 @@ void Interviewmanager::displayInterviwer()
         temp=temp->next;
         i++;
     }
+    return true;
 }
 
 void Interviewmanager::removeInterviwer()

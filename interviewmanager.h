@@ -6,10 +6,12 @@
 
 #include"mylist.h"
 #include"canditate.h"
-#include"date_time.h"
+#include"datetime.h"
 #include"interviwer.h"
 #include "canditatelist.h"
 #include "interviewlist.h"
+
+
 using namespace std;
 
 
@@ -18,7 +20,7 @@ class Interviewmanager
 private:
 
 //    list<Canditate> canditate;
-    list<Date_Time> datetime;
+//    list<Date_Time> datetime;
 //    list<Interviwer> myInterviwer;
 
     string m_adminname;
@@ -32,11 +34,15 @@ public:
     void removeInterviwer();
     void Login();
     void adminLogin();
-    void displayCanditate();
-    void displayInterviwer();
+    bool displayCanditate();
+    bool displayInterviwer();
     bool isValidName(string );
     bool isValidPhno(string);
     bool passwordCheckIn(string);
+    void ScheduleInterview();
+    void removeScheduleInterview();
+    bool checkTimeValid(const string time);
+    bool checkDateValid(const string date);
 
 
 };

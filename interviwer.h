@@ -4,6 +4,7 @@
 #include<iostream>
 #include<string>
 #include"canditate.h"
+
 using namespace std;
 
 class Interviwer
@@ -11,6 +12,7 @@ class Interviwer
     string m_name;
     string m_employeid;
 public:
+
     // Interviwer(int i,string n);
     void setInterviwerName(string name);
     void setInterviwerId(string empid);
