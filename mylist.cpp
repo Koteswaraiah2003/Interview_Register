@@ -1,8 +1,8 @@
-#include "mylist.h"
-#include"canditate.h"
-mylist::mylist() {
-    next=nullptr;
-    prev=nullptr;
-}
+// #include "mylist.h"
+// #include"canditate.h"
+// mylist::mylist(T value) {
+//     next=nullptr;
+//     prev=nullptr;
+// }
 
 
