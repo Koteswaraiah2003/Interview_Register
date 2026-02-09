@@ -12,6 +12,7 @@ add_executable(Interviwer_Register main.cpp
     datetime.h datetime.cpp
     mylist.h mylist.cpp
     functions.cpp
+    interview.h
 
 )
 

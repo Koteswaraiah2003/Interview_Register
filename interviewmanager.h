@@ -3,11 +3,13 @@
 
 #include<string>
 #include<list>
+#include<map>
 
 #include"mylist.h"
 #include"canditate.h"
 #include"datetime.h"
 #include"interviwer.h"
+#include"interview.h"
 
 
 
@@ -26,6 +28,7 @@ public:
 
     mylist<Interviwer>*interviwerhead;
     mylist<Interviwer>*interviwerend;
+    map<int, Interview>scheduledInterviews;
 
     // CanditateList canditatelist;
     // InterviweList interviwerlist;
@@ -48,6 +51,10 @@ public:
     void removeScheduleInterview();
     bool checkTimeValid(const string time);
     bool checkDateValid(const string date);
+    mylist<Canditate>* findCanditate(int id);
+    mylist<Interviwer>* findInterviwer(string id);
+    void displayScheduleInterviews();
+
 
 
 };

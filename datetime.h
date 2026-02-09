@@ -16,6 +16,9 @@ private:
     int m_hour,m_minute,m_second;
 public:
     DateTime();
+    void setDate(string);
+    void setTime(string);
+
     string getTime();
     string getDate();
 };

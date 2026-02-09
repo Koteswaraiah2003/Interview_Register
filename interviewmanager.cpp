@@ -20,6 +20,30 @@ Interviewmanager::Interviewmanager() {
 }
 
 
+mylist<Canditate>* Interviewmanager::findCanditate(int id)
+{
+    mylist<Canditate>*temp = canditatehead;
+    while(temp !=nullptr)
+    {
+        if(temp->data.getCabditateId() == id)
+            return temp;
+        temp = temp->next;
+    }
+    return nullptr;
+}
+
+mylist<Interviwer>* Interviewmanager::findInterviwer(string id)
+{
+    mylist<Interviwer>* temp = interviwerhead;
+    while(temp != nullptr)
+    {
+        if(temp->data.getInterviwerId()==id)
+            return temp;
+        temp = temp->next;
+    }
+    return nullptr;
+}
+
 bool Interviewmanager::checkTimeValid(const string time)
 {
     if (time.length() != 5)
@@ -223,9 +247,9 @@ void Interviewmanager::Login()
 {
     string option1;
     int option=0;
-    while(option!=3)
+    while(option!=4)
     {
-        cout<<"\n1)Admin\t2)Canditate\t3)exit\n";
+        cout<<"\n1)Admin\t\t2)Canditate\t3)DisplayScheduleInterview\t4)exit\n";
         getline(cin,option1);
         if(!(numberValid(option1)))
         {
@@ -243,6 +267,10 @@ void Interviewmanager::Login()
             else if(option==2)
             {
                 addCanditate();
+            }
+            else if(option ==3)
+            {
+                displayScheduleInterviews();
             }
         }
     }
@@ -341,7 +369,7 @@ void Interviewmanager::adminLogin()
                             {
                                 string option4;
                                 int option5;
-                                cout<<"\n1)addinterviewer\t2)removeinterviewer\t3)scheduleInterview\t4)RemoveScheduleInterview\t5)exit\n";
+                                cout<<"\n1)addinterviewer\t2)removeinterviewer\t3)scheduleInterview\t4)RemoveScheduleInterview\t5)DisplayscheduleInterview\t6)exit\n";
                                 getline(cin,option4);
                                 if(!(numberValid(option4)))
                                 {
@@ -371,7 +399,11 @@ void Interviewmanager::adminLogin()
                                     {
                                         removeScheduleInterview();
                                     }
-                                    else if(option5==5)
+                                    else if(option5 == 5)
+                                    {
+                                        displayScheduleInterviews();
+                                    }
+                                    else if(option5==6)
                                         break;
 
                                 }
@@ -389,7 +421,33 @@ void Interviewmanager::adminLogin()
 
 void Interviewmanager::removeScheduleInterview()
 {
-    cout<<"Pending"<<endl;
+    // cout<<"Pending"<<endl;
+    if(scheduledInterviews.empty())
+    {
+        cout<<"\nNo interviews schuled to remove\n";
+        return;
+    }
+    string idInput;
+    int id;
+
+    cout<<"\nEnter Canditate ID to remove interview:";
+    getline(cin, idInput);
+
+    if(!numberValid(idInput))
+    {
+        cout<<"Invalid Id\n";
+        return ;
+    }
+    id = stoi(idInput);
+
+    if(scheduledInterviews.erase(id))
+    {
+        cout<<"Interview removed successfully\n";
+    }
+    else
+    {
+        cout<<"No interview scheduled for this canditate\n";
+    }
 }
 
 bool Interviewmanager::checkCanditateID(int Id)
@@ -423,9 +481,38 @@ bool Interviewmanager::checkEmployeId(string Id)
             cout<<endl;
             return true;
         }
+        temp = temp->next;
     }
     return false;
 }
+
+void Interviewmanager::displayScheduleInterviews()
+{
+    if(scheduledInterviews.empty())
+    {
+        cout<<"\nNo interviews scheduled yet\n";
+        return;
+    }
+
+    cout<<"\n Scheduled Interviews \n";
+
+    for(auto &pair : scheduledInterviews)
+    {
+        cout<<"\nCandidate ID: "<<pair.first<<endl;
+
+        cout<<"Candidate Details:\n";
+        pair.second.canditate.displayCanditateDetails();
+
+        cout<<"Interviewer Details:\n";
+        pair.second.interviwer.displayInterviwerDetails();
+
+        cout<<"Date: "<<pair.second.schedule.getDate()<<endl;
+        cout<<"Time: "<<pair.second.schedule.getTime()<<endl;
+
+        cout<<"-----------------------------------------\n";
+    }
+}
+
 
 void Interviewmanager::ScheduleInterview()
 {
@@ -496,6 +583,22 @@ void Interviewmanager::ScheduleInterview()
         }
         cout<<"sorry the formate is wrong"<<endl;
     }
+
+    Interview newInterview;
+
+    mylist<Canditate>* cnode = findCanditate(CanditateId);
+    newInterview.canditate = cnode->data;
+
+    mylist<Interviwer>* inode = findInterviwer(employeId);
+    newInterview.interviwer = inode->data;
+
+    DateTime dt;
+    dt.setDate(date);
+    dt.setTime(time);
+    newInterview.schedule = dt;
+
+    scheduledInterviews[CanditateId] = newInterview;
+
     cout<<"Thankyou Interview is scheduled"<<endl;
 
 }
